@@ -54,7 +54,7 @@ ui = function() {
                    fluidRow(
                      column(width = 2,
                             virtualSelectInput("reporting_flag",
-                                               label = "Reporting flag",
+                                               label = div(icon("filter"), span("Reporting flag")),
                                                search = TRUE,
                                                autoSelectFirstOption = FALSE,
                                                multiple = FALSE,
@@ -62,14 +62,15 @@ ui = function() {
                             )
                      ),
                      column(width = 2,
-                            numericInput("year_from", label = "Year from", value = 2023)
+                            numericInput("year_from", label = div(icon("filter"), span("Year from")), value = 2022)
                      ),
                      column(width = 2,
-                            numericInput("year_to",   label = "Year to"  , value = 2023)
+                            numericInput("year_to",   label = div(icon("filter"), span("Year to"))  , value = 2022)
                      ),
                      column(width = 2,
                             virtualSelectInput("version_reported",
                                                label = "Version reported",
+                                               search = TRUE,
                                                multiple = FALSE,
                                                autoSelectFirstOption = FALSE,
                                                choices = ALL_VERSIONS
@@ -78,6 +79,7 @@ ui = function() {
                      column(width = 2,
                             virtualSelectInput("content_type",
                                                label = "Content (data)",
+                                               search = TRUE,
                                                multiple = FALSE,
                                                autoSelectFirstOption = FALSE,
                                                choices = ALL_CONTENT_TYPES
@@ -88,11 +90,163 @@ ui = function() {
                                tabPanel("ST02-T1NC",
                                         h3("Task 1 - Nominal Catches"),
 
-                                        actionButton  ("gen_st02", "Generate"),
                                         downloadButton("exp_st02", "Export"),
 
                                         div(style = "margin-top: .5em; font-size: x-small",
                                             dataTableOutput("ST02", fill = TRUE)
+                                        )
+                               ),
+                               tabPanel("ST03-T2CE",
+                                        h3("Task 2 - Catch and effort"),
+
+                                        fluidRow(
+                                          column(width = 2,
+                                                 virtualSelectInput("ce_data_source",
+                                                                    label = div(icon("filter"), span("Data source")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_DATA_SOURCES)
+                                          ),
+                                          column(width = 2,
+                                                 numericInput("ce_data_coverage", label = "Data coverage (%)",
+                                                              min = 0, max = 100, value = 100)
+                                          )
+                                        ),
+
+                                        downloadButton("exp_st03", "Export"),
+
+                                        div(style = "margin-top: .5em; font-size: x-small",
+                                            dataTableOutput("ST03", fill = TRUE)
+                                        )
+                               ),
+                               tabPanel("ST04-T2SZ",
+                                        h3("Task 2 - Size sampling"),
+
+                                        fluidRow(
+                                          column(width = 2,
+                                                 virtualSelectInput("sz_species",
+                                                                    #selected = "ALB",
+                                                                    label = div(icon("filter"), span("Species")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_SPECIES)
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("sz_sampling_location",
+                                                                    #selected = "ATS",
+                                                                    label = div(icon("filter"), span("Sampling location")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_SAMPLING_LOCATIONS)
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("sz_frequency_type",
+                                                                    #selected = "TLE",
+                                                                    label = div(icon("filter"), span("Frequency type")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_FREQUENCY_TYPES)
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("sz_class_limit",
+                                                                    #selected = "LL",
+                                                                    label = div(icon("filter"), span("Class limit")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_CLASS_LIMITS)
+                                          )
+                                        ),
+                                        fluidRow(
+                                          column(width = 2,
+                                                 virtualSelectInput("sz_product_type",
+                                                                    label = div(icon("filter"), span("Product type")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_PRODUCT_TYPES)
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("sz_sampling_unit",
+                                                                    #selected = "HLS",
+                                                                    label = div(icon("filter"), span("Sampling unit")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_SAMPLING_UNITS)
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("sz_raised",
+                                                                    #selected = "No",
+                                                                    label = div(icon("filter"), span("Raised")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = c("Yes", "No"))
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("sz_size_interval",
+                                                                    #selected = 1,
+                                                                    label = div(icon("filter"), span("Size interval")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_SIZE_INTERVALS)
+                                          )
+                                        ),
+
+                                        downloadButton("exp_st04", "Export"),
+
+                                        div(style = "margin-top: .5em; font-size: x-small",
+                                           dataTableOutput("ST04", fill = TRUE)
+                                        )
+                               ),
+                               tabPanel("ST05-T2CS",
+                                        h3("Task 2 - Catch-at-size"),
+
+                                        fluidRow(
+                                          column(width = 2,
+                                                 virtualSelectInput("cs_species",
+                                                                    label = div(icon("filter"), span("Species")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = CAS_SPECIES)
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("cs_frequency_type",
+                                                                    label = div(icon("filter"), span("Frequency type")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = CAS_FREQUENCY_TYPES)
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("cs_size_interval",
+                                                                    label = div(icon("filter"), span("Size interval")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_SIZE_INTERVALS)
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("cs_class_limit",
+                                                                    label = div(icon("filter"), span("Class limit")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_CLASS_LIMITS)
+                                          )
+                                        ),
+
+                                        downloadButton("exp_st05", "Export"),
+
+                                        div(style = "margin-top: .5em; font-size: x-small",
+                                            dataTableOutput("ST05", fill = TRUE)
                                         )
                                )
                    )

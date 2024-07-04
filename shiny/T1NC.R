@@ -1,7 +1,8 @@
-get_NC = function(year_from, year_to, reporting_flag) {
+load_NC = function(reporting_flag, year_from, year_to) {
   SQL =
     paste0("
   	SELECT
+    	fg.FlagCode,
     	ft.FlagOfVesselCode as FlagVessel,
     	ft.FleetSuffix,
     	t1.Year4 AS Year,
@@ -83,58 +84,69 @@ get_NC = function(year_from, year_to, reporting_flag) {
     	t1.CatchTypeID = t1n.CatchTypeID AND
     	t1.TargetByCatchID = t1n.TargetByCatchID
     WHERE
-        t1.CatchMT > 0 AND
-        t1.Year4 BETWEEN ", year_from, " AND ", year_to, " AND
-    	  fg.FlagCode = '", reporting_flag, "'
+    	  --fg.FlagCode = '", reporting_flag, "' AND
+        --t1.Year4 BETWEEN ", year_from, " AND ", year_to, " AND
+        t1.CatchMT > 0
     "
     )
 
-  NC =
+  return(
     tabular_query(
       statement = SQL,
       connection = DB_T1(server = "ICARO\\SQL16")
     )
+  )
+}
 
-  NC$CatchTypeCode =
+filter_NC = function(NC_all,
+                     reporting_flag, year_from, year_to) {
+
+  filtered_NC = NC_all[FlagCode == reporting_flag &
+                       Year >= year_from &
+                       Year <= year_to]
+
+  filtered_NC$FlagCode = NULL
+
+  filtered_NC$CatchTypeCode =
     factor(
-      NC$CatchTypeCode,
+      filtered_NC$CatchTypeCode,
       levels = c("L", "DD", "DL", "FA"),
       labels = c("L", "DD", "DL", "FA"),
       ordered = TRUE
     )
 
-  NC[CatchTypeCode == "L",             `:=`(ConversionGroup = "CONV_L", DataSourceGroup = "DS_L", CorrectionsGroup = "CORR_L")]
-  NC[CatchTypeCode == "FA",            `:=`(ConversionGroup = "CONV_F", DataSourceGroup = "DS_F", CorrectionsGroup = "CORR_F")]
-  NC[CatchTypeCode %in% c("DD", "DL"), `:=`(ConversionGroup = "CONV_D", DataSourceGroup = "DS_D", CorrectionsGroup = "CORR_D")]
-  NC[is.na(CatchTypeCode),             `:=`(ConversionGroup = "CONV_U", DataSourceGroup = "DS_U", CorrectionsGroup = "CORR_U")]
+  filtered_NC[CatchTypeCode == "L",             `:=`(ConversionGroup = "CONV_L", DataSourceGroup = "DS_L", CorrectionsGroup = "CORR_L")]
+  filtered_NC[CatchTypeCode == "FA",            `:=`(ConversionGroup = "CONV_F", DataSourceGroup = "DS_F", CorrectionsGroup = "CORR_F")]
+  filtered_NC[CatchTypeCode %in% c("DD", "DL"), `:=`(ConversionGroup = "CONV_D", DataSourceGroup = "DS_D", CorrectionsGroup = "CORR_D")]
+  filtered_NC[is.na(CatchTypeCode),             `:=`(ConversionGroup = "CONV_U", DataSourceGroup = "DS_U", CorrectionsGroup = "CORR_U")]
 
-  NC$ConversionGroup =
+  filtered_NC$ConversionGroup =
     factor(
-      NC$ConversionGroup,
+      filtered_NC$ConversionGroup,
       levels = c("CONV_L", "CONV_F", "CONV_D", "CONV_U"),
       labels = c("CONV_L", "CONV_F", "CONV_D", "CONV_U"),
       ordered = TRUE
     )
 
-  NC$DataSourceGroup =
+  filtered_NC$DataSourceGroup =
     factor(
-      NC$DataSourceGroup,
+      filtered_NC$DataSourceGroup,
       levels = c("DS_L", "DS_F", "DS_D", "DS_U"),
       labels = c("DS_L", "DS_F", "DS_D", "DS_U"),
       ordered = TRUE
     )
 
-  NC$CorrectionsGroup =
+  filtered_NC$CorrectionsGroup =
     factor(
-      NC$CorrectionsGroup,
+      filtered_NC$CorrectionsGroup,
       levels = c("CORR_L", "CORR_F", "CORR_D", "CORR_U"),
       labels = c("CORR_L", "CORR_F", "CORR_D", "CORR_U"),
       ordered = TRUE
     )
 
-  NC_data =
+  filtered_NC_w =
     dcast.data.table(
-      NC[CatchTypeCode != "LF"],
+      filtered_NC[CatchTypeCode != "LF"],
       formula = FlagVessel + FleetSuffix + Year + Species + Stock + SamplingArea + Area + Gear + FishingZone + TargetBycatch ~ CatchTypeCode,
       fun.aggregate = function(v) { return(sum(v, na.rm = TRUE)) },
       fill = NA,
@@ -142,9 +154,9 @@ get_NC = function(year_from, year_to, reporting_flag) {
       value.var = "CatchKg"
     )
 
-  NC_conversion_factors =
+  NC_conversion_factors_w =
     dcast.data.table(
-      NC[CatchTypeCode != "LF"],
+      filtered_NC[CatchTypeCode != "LF"],
       formula = FlagVessel + FleetSuffix + Year + Species + Stock + SamplingArea + Area + Gear + FishingZone + TargetBycatch ~ ConversionGroup,
       fun.aggregate = function(v) { return(min(v, na.rm = TRUE)) },
       fill = NA,
@@ -152,11 +164,11 @@ get_NC = function(year_from, year_to, reporting_flag) {
       value.var = "ConversionFactor"
     )
 
-  NC_conversion_factors[is.na(CONV_L) & !is.na(CONV_F), CONV_L := CONV_F]
+  NC_conversion_factors_w[is.na(CONV_L) & !is.na(CONV_F), CONV_L := CONV_F]
 
-  NC_data_sources =
+  NC_data_sources_w =
     dcast.data.table(
-      NC[CatchTypeCode != "LF"],
+      filtered_NC[CatchTypeCode != "LF"],
       formula = FlagVessel + FleetSuffix + Year + Species + Stock + SamplingArea + Area + Gear + FishingZone + TargetBycatch ~ DataSourceGroup,
       fun.aggregate = function(v) { return(min(v, na.rm = TRUE)) },
       fill = NA,
@@ -164,11 +176,11 @@ get_NC = function(year_from, year_to, reporting_flag) {
       value.var = "DataSource"
     )
 
-  NC_data_sources[is.na(DS_L) & !is.na(DS_F), DS_L := DS_F]
+  NC_data_sources_w[is.na(DS_L) & !is.na(DS_F), DS_L := DS_F]
 
-  NC_corrections =
+  NC_corrections_w =
     dcast.data.table(
-      NC[CatchTypeCode != "LF"],
+      filtered_NC[CatchTypeCode != "LF"],
       formula = FlagVessel + FleetSuffix + Year + Species + Stock + SamplingArea + Area + Gear + FishingZone + TargetBycatch ~ CorrectionsGroup,
       fun.aggregate = function(v) { return(min(v, na.rm = TRUE)) },
       fill = NA,
@@ -176,40 +188,41 @@ get_NC = function(year_from, year_to, reporting_flag) {
       value.var = "Corrections"
     )
 
-  NC_corrections[is.na(CORR_L) & !is.na(CORR_F), CORR_L := CORR_F]
+  NC_corrections_w[is.na(CORR_L) & !is.na(CORR_F), CORR_L := CORR_F]
 
-  NC_final =
+  NC_final_w =
     merge(
-      NC_data,
-      NC_conversion_factors,
+      filtered_NC_w,
+      NC_conversion_factors_w,
       all.x = TRUE,
       all.y = TRUE
     )
 
-  NC_final =
+  NC_final_w =
     merge(
-      NC_final,
-      NC_data_sources,
+      NC_final_w,
+      NC_data_sources_w,
       all.x = TRUE,
       all.y = TRUE
     )
 
-  NC_final =
+  NC_final_w =
     merge(
-      NC_final,
-      NC_corrections,
+      NC_final_w,
+      NC_corrections_w,
       all.x = TRUE,
       all.y = TRUE
     )
 
   return(
-    NC_final
+    NC_final_w
     [, .(FlagVessel, FleetSuffix, Year, Species, Stock, SamplingArea, Area, Gear, FishingZone, L, DD, DL, FA, TargetBycatch, CONV_L, CONV_D, DS_L, CORR_L, DS_D, CORR_D)]
     [order(Year, FleetSuffix, Species, Stock, SamplingArea, Area, Gear, FishingZone)]
   )
 }
 
-export_ST02A = function(statistical_correspondent = NULL,
+export_ST02A = function(NC_all,
+                        statistical_correspondent = NULL,
                         version_reported = "Final",
                         content_type = "Revision (FULL)",
                         reporting_flag, year_from, year_to,
@@ -235,9 +248,9 @@ export_ST02A = function(statistical_correspondent = NULL,
   country           = REF_FLAGS[CODE == statistical_correspondent$country]$NAME_EN
   reporting_country = REF_FLAGS[CODE == reporting_flag]$NAME_EN
 
-  NC = get_NC(year_from, year_to, reporting_flag)
+  filtered_NC = filter_NC(NC_all, reporting_flag, year_from, year_to)
 
-  if(nrow(NC) == 0)
+  if(nrow(filtered_NC) == 0)
     stop(paste0("No T1NC data found for ", reporting_flag, " (", year_from, "-", year_to, ")"))
 
   xls_template = wb_load(template_file)
@@ -260,9 +273,9 @@ export_ST02A = function(statistical_correspondent = NULL,
   xls_template$add_data(sheet = main_sheet, version_reported, start_row = 17, start_col = 3, col_names = FALSE)
   xls_template$add_data(sheet = main_sheet, content_type,     start_row = 18, start_col = 3, col_names = FALSE)
 
-  xls_template$add_data(sheet = main_sheet, NC, start_row = 26, col_names = FALSE, na.strings = "")
+  xls_template$add_data(sheet = main_sheet, filtered_NC, start_row = 26, col_names = FALSE, na.strings = "")
 
-  num_rows = nrow(NC)
+  num_rows = nrow(filtered_NC)
 
   if(num_rows > 25) {
     xls_template$update_table(sheet = main_sheet, tabname = "tblST02A", dims = paste0("A25:T", 25 + num_rows))
