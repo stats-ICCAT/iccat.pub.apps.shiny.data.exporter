@@ -86,7 +86,7 @@ server = function(input, output, session) {
                    reporting_flag   = input$reporting_flag,
                    year_from        = input$year_from,
                    year_to          = input$year_to,
-                   template_file    = "../refs/ST02-T1NC.xlsx",
+                   template_file    = "./refs/ST02-T1NC.xlsx",
                    destination_file = temp_file)
 
       file.copy(temp_file, output_filename)
@@ -177,17 +177,17 @@ server = function(input, output, session) {
                                                    address     = input$address,
                                                    country     = input$country),
 
-                   version_reported = input$version_reported,
-                   content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
-                   data_coverage    = input$ce_data_coverage,
+                  version_reported = input$version_reported,
+                  content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
+                  data_coverage    = input$ce_data_coverage,
 
-                   reporting_flag   = input$reporting_flag,
-                   year_from        = input$year_from,
-                   year_to          = input$year_to,
-                   data_source      = input$ce_data_source,
+                  reporting_flag   = input$reporting_flag,
+                  year_from        = input$year_from,
+                  year_to          = input$year_to,
+                  data_source      = input$ce_data_source,
 
-                   template_file    = "../refs/ST03-T2CE.xlsx",
-                   destination_file = temp_file)
+                  template_file    = "./refs/ST03-T2CE.xlsx",
+                  destination_file = temp_file)
 
       file.copy(temp_file, output_filename)
     }
@@ -260,8 +260,8 @@ server = function(input, output, session) {
         )
       )
     ) %>%
-    DT::formatCurrency(columns = c(14, 17), currency = "") %>%
-    DT::formatCurrency(columns = c(18, 20:23), currency = "", interval = 3, mark = ",", digits = 0)
+      DT::formatCurrency(columns = c(14, 17), currency = "") %>%
+      DT::formatCurrency(columns = c(18, 20:23), currency = "", interval = 3, mark = ",", digits = 0)
   })
 
   output$exp_st04 = downloadHandler(
@@ -296,7 +296,7 @@ server = function(input, output, session) {
                   size_interval     = input$sz_size_interval,
                   class_limit       = input$sz_class_limit,
 
-                  template_file    = "../refs/ST04-T2SZ.xlsx",
+                  template_file    = "./refs/ST04-T2SZ.xlsx",
                   destination_file = temp_file)
 
       file.copy(temp_file, output_filename)
@@ -398,7 +398,7 @@ server = function(input, output, session) {
                   size_interval     = input$cs_size_interval,
                   class_limit       = input$cs_class_limit,
 
-                  template_file    = "../refs/ST05-T2CS.xlsx",
+                  template_file    = "./refs/ST05-T2CS.xlsx",
                   destination_file = temp_file)
 
       file.copy(temp_file, output_filename)
