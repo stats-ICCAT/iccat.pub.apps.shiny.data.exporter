@@ -1,4 +1,3 @@
-library(iccat.dev.data)
 library(iccat.pub.data)
 
 library(openxlsx2)
