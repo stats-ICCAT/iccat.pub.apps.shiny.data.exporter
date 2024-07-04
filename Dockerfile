@@ -23,7 +23,8 @@ RUN install2.r --error --skipinstalled \
     mapplots \
     ggthemes \
     ggnewscale \
-    sf
+    sf \
+    openxlsx2
 
 # Sets the working directory to the shiny-server root folder
 WORKDIR /srv/shiny-server
