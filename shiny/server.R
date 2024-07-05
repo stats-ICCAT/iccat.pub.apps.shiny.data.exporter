@@ -367,8 +367,8 @@ server = function(input, output, session) {
         )
       )
     ) %>%
-    DT::formatCurrency(columns = c(12, 15), currency = "") %>%
-    DT::formatCurrency(columns = c(13, 16, 18:21), currency = "", interval = 3, mark = ",", digits = 0)
+      DT::formatCurrency(columns = c(12, 15), currency = "") %>%
+      DT::formatCurrency(columns = c(13, 16, 18:21), currency = "", interval = 3, mark = ",", digits = 0)
   })
 
   output$exp_st05 = downloadHandler(
