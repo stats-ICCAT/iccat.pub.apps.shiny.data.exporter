@@ -15,15 +15,7 @@ RUN install2.r --error --skipinstalled \
     DT \
     devtools \
     dplyr \
-    RColorBrewer \
-    scales \
-    scatterpie \
-    maps \
-    mapdata \
-    mapplots \
     ggthemes \
-    ggnewscale \
-    sf \
     openxlsx2
 
 # Sets the working directory to the shiny-server root folder
