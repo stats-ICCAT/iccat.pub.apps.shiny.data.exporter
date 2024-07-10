@@ -1,9 +1,9 @@
 server = function(input, output, session) {
   output$ST02 = renderDataTable({
-    ST02_table = filter_NC(NC,
-                           reporting_flag = input$reporting_flag,
-                           year_from = input$year_from,
-                           year_to = input$year_to)
+    ST02_table = ST02.filter_data(NC,
+                                  reporting_flag = input$reporting_flag,
+                                  year_from = input$year_from,
+                                  year_to = input$year_to)
 
     if(nrow(ST02_table) == 0) stop("No T1NC data identified by current search criteria!")
 
@@ -71,34 +71,33 @@ server = function(input, output, session) {
     content = function(output_filename) {
       temp_file = temp_xlsx()
 
-      export_ST02A(NC,
-                   statistical_correspondent = list(name  = input$name,
-                                                    email = input$email,
-                                                    phone = input$phone,
-                                                    institution = input$institution,
-                                                    department  = input$department,
-                                                    address     = input$address,
-                                                    country     = input$country),
+      ST02.export(NC,
+                  statistical_correspondent = list(name  = input$name,
+                                                   email = input$email,
+                                                   phone = input$phone,
+                                                   institution = input$institution,
+                                                   department  = input$department,
+                                                   address     = input$address,
+                                                   country     = input$country),
 
-                   version_reported = input$version_reported,
-                   content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
+                  version_reported = input$version_reported,
+                  content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
 
-                   reporting_flag   = input$reporting_flag,
-                   year_from        = input$year_from,
-                   year_to          = input$year_to,
-                   template_file    = "./refs/ST02-T1NC.xlsx",
-                   destination_file = temp_file)
+                  reporting_flag   = input$reporting_flag,
+                  year_from        = input$year_from,
+                  year_to          = input$year_to,
+                  destination_file = temp_file)
 
       file.copy(temp_file, output_filename)
     }
   )
 
   output$ST03 = renderDataTable({
-    ST03_table = filter_CE(EF, CA,
-                           reporting_flag = input$reporting_flag,
-                           year_from = input$year_from,
-                           year_to = input$year_to,
-                           data_source = input$ce_data_source)
+    ST03_table = ST03.filter_data_CE(EF, CA,
+                                     reporting_flag = input$reporting_flag,
+                                     year_from = input$year_from,
+                                     year_to = input$year_to,
+                                     data_source = input$ce_data_source)
 
     if(nrow(ST03_table) == 0) stop("No T2CE data identified by current search criteria!")
 
@@ -168,7 +167,7 @@ server = function(input, output, session) {
     content = function(output_filename) {
       temp_file = temp_xlsx()
 
-      export_ST03(EF, CA,
+      ST03.export(EF, CA,
                   statistical_correspondent = list(name  = input$name,
                                                    email = input$email,
                                                    phone = input$phone,
@@ -186,7 +185,6 @@ server = function(input, output, session) {
                   year_to          = input$year_to,
                   data_source      = input$ce_data_source,
 
-                  template_file    = "./refs/ST03-T2CE.xlsx",
                   destination_file = temp_file)
 
       file.copy(temp_file, output_filename)
@@ -194,11 +192,11 @@ server = function(input, output, session) {
   )
 
   output$ST04 = renderDataTable({
-    ST04_table = filter_SZ(SZ,
-                           reporting_flag = input$reporting_flag, year_from = input$year_from, year_to = input$year_to,
-                           species = input$sz_species, product_type = input$sz_product_type,
-                           sampling_location = input$sz_sampling_location, sampling_unit = input$sz_sampling_unit, raised = is.na(input$sz_raised) | input$sz_raised == "Yes",
-                           frequency_type = input$sz_frequency_type, size_interval = input$sz_size_interval, class_limit = input$sz_class_limit)
+    ST04_table = ST04.filter_data(SZ,
+                                  reporting_flag = input$reporting_flag, year_from = input$year_from, year_to = input$year_to,
+                                  species = input$sz_species, product_type = input$sz_product_type,
+                                  sampling_location = input$sz_sampling_location, sampling_unit = input$sz_sampling_unit, raised = is.na(input$sz_raised) | input$sz_raised == "Yes",
+                                  frequency_type = input$sz_frequency_type, size_interval = input$sz_size_interval, class_limit = input$sz_class_limit)
 
     if(nrow(ST04_table) == 0) stop("No T2SZ data identified by current search criteria!")
 
@@ -269,7 +267,7 @@ server = function(input, output, session) {
     content = function(output_filename) {
       temp_file = temp_xlsx()
 
-      export_ST04(SZ,
+      ST04.export(SZ,
                   statistical_correspondent = list(name  = input$name,
                                                    email = input$email,
                                                    phone = input$phone,
@@ -296,7 +294,7 @@ server = function(input, output, session) {
                   size_interval     = input$sz_size_interval,
                   class_limit       = input$sz_class_limit,
 
-                  template_file    = "./refs/ST04-T2SZ.xlsx",
+                  #template_file    = "./refs/ST04-T2SZ.xlsx",
                   destination_file = temp_file)
 
       file.copy(temp_file, output_filename)
@@ -304,10 +302,10 @@ server = function(input, output, session) {
   )
 
   output$ST05 = renderDataTable({
-    ST05_table = filter_CS(CS,
-                           reporting_flag = input$reporting_flag, year_from = input$year_from, year_to = input$year_to,
-                           species = input$cs_species,
-                           frequency_type = input$cs_frequency_type, size_interval = input$cs_size_interval, class_limit = input$cs_class_limit)
+    ST05_table = ST05.filter_data(CS,
+                                  reporting_flag = input$reporting_flag, year_from = input$year_from, year_to = input$year_to,
+                                  species = input$cs_species,
+                                  frequency_type = input$cs_frequency_type, size_interval = input$cs_size_interval, class_limit = input$cs_class_limit)
 
     if(nrow(ST05_table) == 0) stop("No T2CS data identified by current search criteria!")
 
@@ -376,7 +374,7 @@ server = function(input, output, session) {
     content = function(output_filename) {
       temp_file = temp_xlsx()
 
-      export_ST05(CS,
+      ST05.export(CS,
                   statistical_correspondent = list(name  = input$name,
                                                    email = input$email,
                                                    phone = input$phone,
@@ -398,7 +396,6 @@ server = function(input, output, session) {
                   size_interval     = input$cs_size_interval,
                   class_limit       = input$cs_class_limit,
 
-                  template_file    = "./refs/ST05-T2CS.xlsx",
                   destination_file = temp_file)
 
       file.copy(temp_file, output_filename)

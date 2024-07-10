@@ -1,3 +1,4 @@
+library(iccat.dev.data)
 library(iccat.pub.data)
 
 library(stringr)
@@ -32,10 +33,10 @@ ALL_FLAGS = build_dropdown_data(REF_FLAGS)
 
 ALL_DATA_SOURCES = build_dropdown_data(REF_DATA_SOURCES)
 
-SP_TEMPERATE    = REF_SPECIES[SPECIES_GROUP == "Temperate tunas"]
-SP_TROPICAL     = REF_SPECIES[SPECIES_GROUP == "Tropical tunas"]
+SP_TEMPERATE    = REF_SPECIES[SPECIES_GROUP       == "Temperate tunas"]
+SP_TROPICAL     = REF_SPECIES[SPECIES_GROUP       == "Tropical tunas"]
 SP_SMALL_TUNAS  = REF_SPECIES[SPECIES_GROUP_ICCAT == "Tunas (small)"]
-SP_BILLFISH     = REF_SPECIES[SPECIES_GROUP == "Billfishes"]
+SP_BILLFISH     = REF_SPECIES[SPECIES_GROUP       == "Billfishes"]
 SP_MAJOR_SHARKS = REF_SPECIES[SPECIES_GROUP_ICCAT == "Sharks (major)"]
 SP_OTHER_SHARKS = REF_SPECIES[SPECIES_GROUP_ICCAT == "Sharks (other)"]
 
@@ -76,11 +77,6 @@ CAS_FREQUENCY_TYPES    = build_dropdown_data(REF_FREQUENCY_TYPES[CODE %in% c("SF
                                                                              "SLJFL")])
 ALL_SIZE_INTERVALS = c(1, 2, 5)
 ALL_CLASS_LIMITS   = build_dropdown_data(REF_SIZE_CLASS_LIMITS[CODE != "UN"])
-
-source("./T1NC.R")
-source("./T2CE.R")
-source("./T2SZ.R")
-source("./T2CS.R")
 
 load("./data/NC.RData")
 load("./data/EF.RData")
