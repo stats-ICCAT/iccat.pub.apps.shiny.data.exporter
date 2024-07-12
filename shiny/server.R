@@ -156,7 +156,7 @@ server = function(input, output, session) {
   )
 
   output$ST02 = renderDataTable({
-    ST01_table = ST02.filter_data(NC,
+    ST02_table = ST02.filter_data(NC,
                                   reporting_flag = input$reporting_flag,
                                   year_from = input$year_from,
                                   year_to = input$year_to)
