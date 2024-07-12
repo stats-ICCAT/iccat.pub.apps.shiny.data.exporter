@@ -27,5 +27,5 @@ save("SZ", file = "./shiny/data/SZ.RData", compress = "gzip")
 CS = ST05.load_data("cas")
 save("CS", file = "./shiny/data/CS.RData", compress = "gzip")
 
-META = list(LAST_UPDATE = "2024-07-04")
+META = list(LAST_UPDATE = "2024-07-12")
 save("META", file = "./shiny/data/META.RData", compress = "gzip")
