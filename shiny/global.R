@@ -78,8 +78,17 @@ CAS_FREQUENCY_TYPES    = build_dropdown_data(REF_FREQUENCY_TYPES[CODE %in% c("SF
 ALL_SIZE_INTERVALS = c(1, 2, 5)
 ALL_CLASS_LIMITS   = build_dropdown_data(REF_SIZE_CLASS_LIMITS[CODE != "UN"])
 
+load("./data/FC.RData")
+load("./data/FC_f.RData")
+
+load("./data/FCG.RData")
+load("./data/FCG_F.RData")
+
 load("./data/NC.RData")
+
 load("./data/EF.RData")
 load("./data/CA.RData")
+
 load("./data/SZ.RData")
+
 load("./data/CS.RData")

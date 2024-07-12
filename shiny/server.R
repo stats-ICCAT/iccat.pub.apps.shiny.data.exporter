@@ -1,6 +1,162 @@
 server = function(input, output, session) {
+  output$ST01A = renderDataTable({
+    ST01_table = ST01A.filter_data(FC, FC_f,
+                                   reporting_flag = input$reporting_flag,
+                                   year_from = input$year_from,
+                                   year_to = input$year_to)
+
+    if(nrow(ST01_table) == 0) stop("No T1FC (ST01A) data identified by current search criteria!")
+
+    colnames(ST01_table) =
+      c("ICCAT serial number",
+        "National reg. number",
+        "IRCS",
+        "IMO",
+        "Vessel name",
+        "Flag of vessel",
+        "Fleet suffix",
+        "Gear group",
+        "LOA (m)",
+        "Tonnage",
+        "Tonnage type",
+        "Fish carrying cap. (mt)",
+        "Year",
+        "Fishing days (ATL)",
+        "Fishing days (MED)",
+        "Fishery 1",
+        "Fishery 2",
+        "Fishery 3",
+        "Fishery 4",
+        "Fishery 5",
+        "Authorised from",
+        "Authorised to",
+        "Tot. fishing days",
+        "Catches in auth. period (kg)",
+        "Bycatch outside auth. period (kg)")
+
+    DT::datatable(
+      ST01_table,
+      options = list(
+        autoWidth = FALSE,
+        scrollX   = TRUE,
+        dom       = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
+      ),
+      filter    = "none",
+      selection = "none",
+      rownames  = FALSE,
+      container = htmltools::withTags(
+        table(
+          class = "display",
+          thead(
+            tr(
+              th(colspan = 12, style = "border-top: 1px solid;", "Vessel attributes"),
+              th(colspan = 13, style = "border-left: 1px solid; border-top: 1px solid;", "Vessel activity in ICCAT fisheries"),
+            ),
+            tr(
+              th(colspan = 5, style = "border-top: 1px solid;", "Vessel ID"),
+              th(colspan = 2, style = "border-left: 1px solid; border-top: 1px solid;", "Fleet ID"),
+              th(colspan = 5, style = "border-left: 1px solid; border-top: 1px solid;", "Other attributes"),
+              th(colspan = 1, style = "border-left: 1px solid; border-top: 1px solid;", "Period"),
+              th(colspan = 2, style = "border-left: 1px solid; border-top: 1px solid;", "Total effort"),
+              th(colspan = 5, style = "border-left: 1px solid; border-top: 1px solid;", "Fisheries (activity, 1 or +)"),
+              th(colspan = 5, style = "border-left: 1px solid; border-top: 1px solid;", "BFTE fisheries only (details)")
+            ),
+            tr(
+              lapply(colnames(ST01_table), th)
+            )
+          )
+        )
+      )
+    ) %>% DT::formatCurrency(columns = c(9, 10, 12, 14, 15, 23, 24, 25), currency = "")
+  })
+
+  output$ST01B = renderDataTable({
+    ST01_table = ST01B.filter_data(FCG, FCG_f,
+                                   reporting_flag = input$reporting_flag,
+                                   year_from = input$year_from,
+                                   year_to = input$year_to)
+
+    if(nrow(ST01_table) == 0) stop("No T1FC (ST01B) data identified by current search criteria!")
+
+    colnames(ST01_table) =
+      c("Flag of vessel",
+        "Fleet suffix",
+        "Gear group",
+        "Fleet description",
+        "LOA class",
+        "GRT class",
+        "Num. vessels",
+        "Year",
+        "Fishing days (ATL)",
+        "Fishing days (MED)",
+        "Fishery 1",
+        "Fishery 2",
+        "Fishery 3",
+        "Fishery 4",
+        "Fishery 5")
+
+    DT::datatable(
+      ST01_table,
+      options = list(
+        autoWidth = FALSE,
+        scrollX   = TRUE,
+        dom       = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
+      ),
+      filter    = "none",
+      selection = "none",
+      rownames  = FALSE,
+      container = htmltools::withTags(
+        table(
+          class = "display",
+          thead(
+            tr(
+              th(colspan = 7, style = "border-top: 1px solid;", "Vessel attributes (small-scale vessels only)"),
+              th(colspan = 13, style = "border-left: 1px solid; border-top: 1px solid;", "Fleet (small-scale) activity in ICCAT fisheries"),
+            ),
+            tr(
+              th(colspan = 4, style = "border-top: 1px solid;", "Fleet ID"),
+              th(colspan = 3, style = "border-left: 1px solid; border-top: 1px solid;", "Other attributes"),
+              th(colspan = 1, style = "border-left: 1px solid; border-top: 1px solid;", "Period"),
+              th(colspan = 2, style = "border-left: 1px solid; border-top: 1px solid;", "Total effort"),
+              th(colspan = 5, style = "border-left: 1px solid; border-top: 1px solid;", "Fisheries (activity, 1 or +)")
+            ),
+            tr(
+              lapply(colnames(ST01_table), th)
+            )
+          )
+        )
+      )
+    ) %>% DT::formatCurrency(columns = c(9, 10), currency = "")
+  })
+
+  output$exp_st01 = downloadHandler(
+    filename = function() { paste0("ST01-T1FC_", input$reporting_flag, "_", input$year_from, "-", input$year_to, ".xlsx") },
+    content = function(output_filename) {
+      temp_file = temp_xlsx()
+
+      ST01.export(FC, FC_f, FCG, FCG_f,
+                  statistical_correspondent = list(name  = input$name,
+                                                   email = input$email,
+                                                   phone = input$phone,
+                                                   institution = input$institution,
+                                                   department  = input$department,
+                                                   address     = input$address,
+                                                   country     = input$country),
+
+                  version_reported = input$version_reported,
+                  content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
+
+                  reporting_flag   = input$reporting_flag,
+                  year_from        = input$year_from,
+                  year_to          = input$year_to,
+                  destination_file = temp_file)
+
+      file.copy(temp_file, output_filename)
+    }
+  )
+
   output$ST02 = renderDataTable({
-    ST02_table = ST02.filter_data(NC,
+    ST01_table = ST02.filter_data(NC,
                                   reporting_flag = input$reporting_flag,
                                   year_from = input$year_from,
                                   year_to = input$year_to)
@@ -67,7 +223,7 @@ server = function(input, output, session) {
   })
 
   output$exp_st02 = downloadHandler(
-    filename = function() { paste0("ST02-T1NC_", input$reporting_flag, "_", input$year_from, "_", input$year_to, ".xlsx") },
+    filename = function() { paste0("ST02-T1NC_", input$reporting_flag, "_", input$year_from, "-", input$year_to, ".xlsx") },
     content = function(output_filename) {
       temp_file = temp_xlsx()
 
@@ -163,7 +319,7 @@ server = function(input, output, session) {
   })
 
   output$exp_st03 = downloadHandler(
-    filename = function() { paste0("ST03-T2CE_", input$reporting_flag, "_", input$year_from, "_", input$year_to, "_", input$ce_data_source, ".xlsx") },
+    filename = function() { paste0("ST03-T2CE_", input$reporting_flag, "_", input$year_from, "-", input$year_to, "_", input$ce_data_source, ".xlsx") },
     content = function(output_filename) {
       temp_file = temp_xlsx()
 
@@ -263,7 +419,12 @@ server = function(input, output, session) {
   })
 
   output$exp_st04 = downloadHandler(
-    filename = function() { paste0("ST04-T2SZ_", input$reporting_flag, "_", input$year_from, "_", input$year_to, ".xlsx") },
+    filename = function() { paste0("ST04-T2SZ_", input$reporting_flag, "_", input$year_from, "-", input$year_to, "_",
+                                   input$sz_species, "_", #input$sz_product_type, "_",
+                                   input$sz_sampling_location, "_", input$sz_sampling_unit, "_",
+                                   ifelse(!is.na(input$sz_raised) & input$sz_raised == "Yes", "RAISED", "NOT_RAISED"), "_",
+                                   input$sz_frequency_type, "_", input$sz_class_limit, "_",
+                                   input$sz_size_interval, ".xlsx") },
     content = function(output_filename) {
       temp_file = temp_xlsx()
 
@@ -370,7 +531,9 @@ server = function(input, output, session) {
   })
 
   output$exp_st05 = downloadHandler(
-    filename = function() { paste0("ST05-T2CS_", input$reporting_flag, "_", input$year_from, "_", input$year_to, "_", ".xlsx") },
+    filename = function() { paste0("ST05-T2CS_", input$reporting_flag, "_", input$year_from, "-", input$year_to, "_",
+                                   input$cs_species, "_",  input$cs_frequency_type, "_", input$cs_class_limit, "_",
+                                   input$cs_size_interval, ".xlsx") },
     content = function(output_filename) {
       temp_file = temp_xlsx()
 

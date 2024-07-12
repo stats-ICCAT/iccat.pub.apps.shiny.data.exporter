@@ -86,9 +86,28 @@ ui = function() {
                             )
                      )
                    ),
-                   tabsetPanel(id = "dataset", selected = "ST02-T1NC",
+                   tabsetPanel(id = "dataset", selected = "ST01-T1FC",
+                               tabPanel("ST01-T1FC",
+                                        h3("Task 1 - Fleet characteristics"),
+
+                                        downloadButton("exp_st01", "Export"),
+                                        div(style = "margin-top: .5em;",
+                                          tabsetPanel(id = "ST01", selected = "ST01A",
+                                                      tabPanel("ST01A",
+                                                               div(style = "margin-top: .5em; font-size: x-small",
+                                                                   dataTableOutput("ST01A", fill = TRUE)
+                                                               )
+                                                      ),
+                                                      tabPanel("ST01B",
+                                                               div(style = "margin-top: .5em; font-size: x-small",
+                                                                   dataTableOutput("ST01B", fill = TRUE)
+                                                               )
+                                                      )
+                                          )
+                                        )
+                               ),
                                tabPanel("ST02-T1NC",
-                                        h3("Task 1 - Nominal Catches"),
+                                        h3("Task 1 - Nominal catches"),
 
                                         downloadButton("exp_st02", "Export"),
 
@@ -226,20 +245,20 @@ ui = function() {
                                                                     choices = CAS_FREQUENCY_TYPES)
                                           ),
                                           column(width = 2,
-                                                 virtualSelectInput("cs_size_interval",
-                                                                    label = div(icon("filter"), span("Size interval")),
-                                                                    search = TRUE,
-                                                                    multiple = FALSE,
-                                                                    autoSelectFirstOption = FALSE,
-                                                                    choices = ALL_SIZE_INTERVALS)
-                                          ),
-                                          column(width = 2,
                                                  virtualSelectInput("cs_class_limit",
                                                                     label = div(icon("filter"), span("Class limit")),
                                                                     search = TRUE,
                                                                     multiple = FALSE,
                                                                     autoSelectFirstOption = FALSE,
                                                                     choices = ALL_CLASS_LIMITS)
+                                          ),
+                                          column(width = 2,
+                                                 virtualSelectInput("cs_size_interval",
+                                                                    label = div(icon("filter"), span("Size interval")),
+                                                                    search = TRUE,
+                                                                    multiple = FALSE,
+                                                                    autoSelectFirstOption = FALSE,
+                                                                    choices = ALL_SIZE_INTERVALS)
                                           )
                                         ),
 
