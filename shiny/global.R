@@ -82,7 +82,7 @@ load("./data/FC.RData")
 load("./data/FC_f.RData")
 
 load("./data/FCG.RData")
-load("./data/FCG_F.RData")
+load("./data/FCG_f.RData")
 
 load("./data/NC.RData")
 
