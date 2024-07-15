@@ -49,17 +49,17 @@ server = function(input, output, session) {
           class = "display",
           thead(
             tr(
-              th(colspan = 12, style = "border-top: 1px solid;", "Vessel attributes"),
-              th(colspan = 13, style = "border-left: 1px solid; border-top: 1px solid;", "Vessel activity in ICCAT fisheries"),
+              th(colspan = 12, "Vessel attributes",                  style = "border-top: 1px solid;"),
+              th(colspan = 13, "Vessel activity in ICCAT fisheries", style = "border-top: 1px solid;border-left: 1px solid;"),
             ),
             tr(
-              th(colspan = 5, style = "border-top: 1px solid;", "Vessel ID"),
-              th(colspan = 2, style = "border-left: 1px solid; border-top: 1px solid;", "Fleet ID"),
-              th(colspan = 5, style = "border-left: 1px solid; border-top: 1px solid;", "Other attributes"),
-              th(colspan = 1, style = "border-left: 1px solid; border-top: 1px solid;", "Period"),
-              th(colspan = 2, style = "border-left: 1px solid; border-top: 1px solid;", "Total effort"),
-              th(colspan = 5, style = "border-left: 1px solid; border-top: 1px solid;", "Fisheries (activity, 1 or +)"),
-              th(colspan = 5, style = "border-left: 1px solid; border-top: 1px solid;", "BFTE fisheries only (details)")
+              th(colspan =  5, "Vessel ID",                          style = ""),
+              th(colspan =  2, "Fleet ID",                           style = "border-left: 1px solid;"),
+              th(colspan =  5, "Other attributes",                   style = "border-left: 1px solid;"),
+              th(colspan =  1, "Period",                             style = "border-left: 1px solid;"),
+              th(colspan =  2, "Total effort",                       style = "border-left: 1px solid;"),
+              th(colspan =  5, "Fisheries (activity, 1 or +)",       style = "border-left: 1px solid;"),
+              th(colspan =  5, "BFTE fisheries only (details)",      style = "border-left: 1px solid;")
             ),
             tr(
               lapply(colnames(ST01_table), th)
@@ -110,15 +110,15 @@ server = function(input, output, session) {
           class = "display",
           thead(
             tr(
-              th(colspan = 7, style = "border-top: 1px solid;", "Vessel attributes (small-scale vessels only)"),
-              th(colspan = 13, style = "border-left: 1px solid; border-top: 1px solid;", "Fleet (small-scale) activity in ICCAT fisheries"),
+              th(colspan =  7, "Vessel attributes (small-scale vessels only)",    style = "border-top: 1px solid;", ),
+              th(colspan = 13, "Fleet (small-scale) activity in ICCAT fisheries", style = "border-left: 1px solid; border-top: 1px solid;"),
             ),
             tr(
-              th(colspan = 4, style = "border-top: 1px solid;", "Fleet ID"),
-              th(colspan = 3, style = "border-left: 1px solid; border-top: 1px solid;", "Other attributes"),
-              th(colspan = 1, style = "border-left: 1px solid; border-top: 1px solid;", "Period"),
-              th(colspan = 2, style = "border-left: 1px solid; border-top: 1px solid;", "Total effort"),
-              th(colspan = 5, style = "border-left: 1px solid; border-top: 1px solid;", "Fisheries (activity, 1 or +)")
+              th(colspan =  4, "Fleet ID",                                        style = ""),
+              th(colspan =  3, "Other attributes",                                style = "border-left: 1px solid;"),
+              th(colspan =  1, "Period",                                          style = "border-left: 1px solid;"),
+              th(colspan =  2, "Total effort",                                    style = "border-left: 1px solid;"),
+              th(colspan =  5, "Fisheries (activity, 1 or +)",                    style = "border-left: 1px solid;")
             ),
             tr(
               lapply(colnames(ST01_table), th)
@@ -170,16 +170,16 @@ server = function(input, output, session) {
         "Species",
         "Stock",
         "Sampling",
-        "Task I",
+        "Task I area",
         "Gear",
         "Fishing zone",
-        "Landings (L)",
-        "Discards (DD)",
-        "Discards (DL)",
-        "Caged BFT (FA)",
+        "Landings (dead, L)",
+        "Discards (dead, DD)",
+        "Discards (alive, DL)",
+        "Caged BFT (alive, FA)",
         "Target / Bycatch",
-        "L",
-        "DD / DL",
+        "Landings (L)",
+        "Discards (DD / DL)",
         "Data source",
         "Corrections",
         "Data source",
@@ -200,18 +200,16 @@ server = function(input, output, session) {
           class = "display",
           thead(
             tr(
-              th(colspan = 1, ""),
-              th(colspan = 1, ""),
-              th(colspan = 1, ""),
-              th(colspan = 1, ""),
-              th(colspan = 3, style = "text-align: center; border-left: 1px solid; border-right: 1px solid;", "Areas"),
-              th(colspan = 2, ""),
-              th(colspan = 2, style = "text-align: center; border-left: 1px solid;",                          "Dead (kg)"),
-              th(colspan = 2, style = "text-align: center; border-left: 1px solid; border-right: 1px solid;", "Alive (kg)"),
-              th(colspan = 1, ""),
-              th(colspan = 2, style = "text-align: center; border-left: 1px solid;",                          "Conv. factors"),
-              th(colspan = 2, style = "text-align: center; border-left: 1px solid;",                          "Landings"),
-              th(colspan = 2, style = "text-align: center; border-left: 1px solid; border-right: 1px solid;", "Discards")
+              th(colspan = 16, "Catch attributes",       style = "text-align: left;   border-top: 1px solid;"),
+              th(colspan =  4, "Data",                   style = "text-align: left;   border-left: 1px solid; border-top: 1px solid;")
+            ),
+            tr(
+              th(colspan = 2, "Fleet ID",                style = "text-align: left;"),
+              th(colspan = 7, "Catch data",              style = "text-align: left;   border-left: 1px solid;"),
+              th(colspan = 5, "Quantities caught (kg)",  style = "text-align: center; border-left: 1px solid;"),
+              th(colspan = 2, "Conversion factor used)", style = "text-align: center; border-left: 1px solid;"),
+              th(colspan = 2, "Landings",                style = "text-align: left;   border-left: 1px solid;"),
+              th(colspan = 2, "Discards",                style = "text-align: left;   border-left: 1px solid;")
             ),
             tr(
               lapply(colnames(ST02_table), th)
@@ -268,10 +266,10 @@ server = function(input, output, session) {
         "Lat",
         "Lon",
         "School type",
-        "Effort",
-        "Effort Type",
-        "Effort",
-        "Effort Type",
+        "Effort 1",
+        "Effort 1 Type",
+        "Effort 2",
+        "Effort 2 Type",
         str_replace_all(colnames(ST03_table)[15:ncol(ST03_table)], "_", " / ")
       )
 
@@ -292,22 +290,15 @@ server = function(input, output, session) {
           class = "display",
           thead(
             tr(
-              th(colspan = 14, style = "border-top: 1px solid;", "Catch and effort attributes"),
-              th(colspan = variable_columns, style = "border-top: 1px solid; border-left: 1px solid;", "Species catch composition (kg)")
+              th(colspan = 14,               "Catch and effort attributes",    style = "border-top: 1px solid;"),
+              th(colspan = variable_columns, "Species catch composition (kg)", style = "border-top: 1px solid; border-left: 1px solid;")
             ),
             tr(
-              th(colspan = 10, ""),
-              th(colspan =  4, style = "border-left: 1px solid;", "Effort data"),
-              th(colspan = variable_columns, style = "border-left: 1px solid;", "")
-            ),
-            tr(
-              th(colspan =  2, "Fleet ID"),
-              th(colspan =  3, style = "border-left: 1px solid;", "Time series / gear"),
-              th(colspan =  4, style = "border-left: 1px solid;", "Geographic area"),
-              th(colspan =  1, style = "border-left: 1px solid;", "Fishing mode"),
-              th(colspan =  2, style = "text-align: center; border-left: 1px solid;", "Primary"),
-              th(colspan =  2, style = "text-align: center; border-left: 1px solid;", "Secondary"),
-              th(colspan = variable_columns, style = "border-left: 1px solid;", "Species / Product type / Catch type")
+              th(colspan =  2,               "Fleet ID"),
+              th(colspan =  3,               "Time series / gear",                  style = "border-left: 1px solid;"),
+              th(colspan =  4,               "Geographic area",                     style = "border-left: 1px solid;"),
+              th(colspan =  5,               "Fishing mode and effort data",        style = "border-left: 1px solid;"),
+              th(colspan = variable_columns, "Species / Product type / Catch type for tuna, tuna-like species, and sharks (targeted and bycatch)", style = "border-left: 1px solid;", )
             ),
             tr(
               lapply(colnames(ST03_table), th)
