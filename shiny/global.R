@@ -63,10 +63,10 @@ CAS_SPECIES = list(
   "Billfish"        = setNames(as.character(SP_BILLFISH_SWO$CODE), paste0(SP_BILLFISH_SWO$CODE, " - ", SP_BILLFISH_SWO$NAME_EN))
 )
 
-ALL_PRODUCT_TYPES = build_dropdown_data(REF_PRODUCT_TYPES[CODE != "UN"])
+ALL_PRODUCT_TYPES = build_dropdown_data(REF_PRODUCT_TYPES)
 
-ALL_SAMPLING_UNITS = build_dropdown_data(REF_SAMPLING_UNITS[CODE != "UNK"])
-ALL_SAMPLING_LOCATIONS = build_dropdown_data(REF_SAMPLING_LOCATIONS[CODE != "UNK"])
+ALL_SAMPLING_UNITS = build_dropdown_data(REF_SAMPLING_UNITS)
+ALL_SAMPLING_LOCATIONS = build_dropdown_data(REF_SAMPLING_LOCATIONS)
 
 ALL_FREQUENCY_TYPES    = build_dropdown_data(REF_FREQUENCY_TYPES[CODE %in% c("SFL",
                                                                              "CFL",
@@ -82,7 +82,7 @@ ALL_FREQUENCY_TYPES    = build_dropdown_data(REF_FREQUENCY_TYPES[CODE %in% c("SF
 CAS_FREQUENCY_TYPES    = build_dropdown_data(REF_FREQUENCY_TYPES[CODE %in% c("SFL",
                                                                              "SLJFL")])
 ALL_SIZE_INTERVALS = c(1, 2, 5)
-ALL_CLASS_LIMITS   = build_dropdown_data(REF_SIZE_CLASS_LIMITS[CODE != "UN"])
+ALL_CLASS_LIMITS   = build_dropdown_data(REF_SIZE_CLASS_LIMITS)
 
 load("./data/FC.RData")
 load("./data/FC_f.RData")
