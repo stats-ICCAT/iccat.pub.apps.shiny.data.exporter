@@ -10,9 +10,15 @@ library(shinyWidgets)
 library(shinycssloaders)
 library(DT)
 
+library(promises)
+library(future)
+
+plan(multisession)
+
 Sys.setlocale(category = "LC_ALL", locale = "en_US.UTF-8")
 
 options(scipen = 9999)
+options(future.rng.onMisuse = "ignore")
 
 build_dropdown_data = function(reference_codes) {
   return(

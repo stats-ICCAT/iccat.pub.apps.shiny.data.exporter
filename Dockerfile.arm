@@ -28,6 +28,8 @@ WORKDIR /
 
 RUN R -e "install.packages(c('devtools', 'stringr', 'dplyr', 'data.table', 'DT', 'shiny', 'shinyjs', 'shinyWidgets', 'shinycssloaders', 'odbc', 'openxlsx', 'openxlsx2'), repos = 'http://cran.r-project.org')"
 
+RUN R -e "install.packages(c('promises', 'future'), repos = 'http://cran.r-project.org')"
+
 # Sets the working directory to the shiny-server root folder
 WORKDIR /srv/shiny-server
 

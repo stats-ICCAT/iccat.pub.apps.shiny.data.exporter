@@ -132,26 +132,47 @@ server = function(input, output, session) {
   output$exp_st01 = downloadHandler(
     filename = function() { paste0("ST01-T1FC_", input$reporting_flag, "_", input$year_from, "-", input$year_to, ".xlsx") },
     content = function(output_filename) {
-      temp_file = temp_xlsx()
+      withProgress(message = "Exporting data to ST01 form. Please wait...", {
+        temp_file = temp_xlsx()
 
-      ST01.export(FC, FC_f, FCG, FCG_f,
-                  statistical_correspondent = list(name  = input$name,
-                                                   email = input$email,
-                                                   phone = input$phone,
-                                                   institution = input$institution,
-                                                   department  = input$department,
-                                                   address     = input$address,
-                                                   country     = input$country),
+        i_statistical_correspondent = list(name  = input$name,
+                                           email = input$email,
+                                           phone = input$phone,
+                                           institution = input$institution,
+                                           department  = input$department,
+                                           address     = input$address,
+                                           country     = input$country)
 
-                  version_reported = input$version_reported,
-                  content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
+        i_version_reported = input$version_reported
+        i_content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN
 
-                  reporting_flag   = input$reporting_flag,
-                  year_from        = input$year_from,
-                  year_to          = input$year_to,
-                  destination_file = temp_file)
+        i_reporting_flag = input$reporting_flag
+        i_year_from      = input$year_from
+        i_year_to        = input$year_to
 
-      file.copy(temp_file, output_filename)
+        ST01A_data = ST01A.filter_data(FC, FC_f,
+                                       i_reporting_flag,
+                                       i_year_from, i_year_to)
+
+        ST01B_data = ST01B.filter_data(FCG, FCG_f,
+                                       i_reporting_flag,
+                                       i_year_from, i_year_to)
+
+        future_promise({
+          ST01.export(ST01A_data, ST01B_data,
+                      statistical_correspondent = i_statistical_correspondent,
+
+                      version_reported = i_version_reported,
+                      content_type     = i_content_type,
+
+                      reporting_flag   = i_reporting_flag,
+                      year_from        = i_year_from,
+                      year_to          = i_year_to,
+                      destination_file = temp_file)
+
+          file.copy(temp_file, output_filename)
+        })
+      })
     }
   )
 
@@ -223,26 +244,42 @@ server = function(input, output, session) {
   output$exp_st02 = downloadHandler(
     filename = function() { paste0("ST02-T1NC_", input$reporting_flag, "_", input$year_from, "-", input$year_to, ".xlsx") },
     content = function(output_filename) {
-      temp_file = temp_xlsx()
+      withProgress(message = "Exporting data to ST02 form. Please wait...", {
+        temp_file = temp_xlsx()
 
-      ST02.export(NC,
-                  statistical_correspondent = list(name  = input$name,
-                                                   email = input$email,
-                                                   phone = input$phone,
-                                                   institution = input$institution,
-                                                   department  = input$department,
-                                                   address     = input$address,
-                                                   country     = input$country),
+        i_statistical_correspondent = list(name  = input$name,
+                                           email = input$email,
+                                           phone = input$phone,
+                                           institution = input$institution,
+                                           department  = input$department,
+                                           address     = input$address,
+                                           country     = input$country)
 
-                  version_reported = input$version_reported,
-                  content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
+        i_version_reported = input$version_reported
+        i_content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN
 
-                  reporting_flag   = input$reporting_flag,
-                  year_from        = input$year_from,
-                  year_to          = input$year_to,
-                  destination_file = temp_file)
+        i_reporting_flag = input$reporting_flag
+        i_year_from      = input$year_from
+        i_year_to        = input$year_to
 
-      file.copy(temp_file, output_filename)
+        ST02_data = ST02.filter_data(NC,
+                                     i_reporting_flag,
+                                     i_year_from, i_year_to)
+        future_promise({
+          ST02.export(ST02_data,
+                      statistical_correspondent = i_statistical_correspondent,
+
+                      version_reported = i_version_reported,
+                      content_type     = i_content_type,
+
+                      reporting_flag   = i_reporting_flag,
+                      year_from        = i_year_from,
+                      year_to          = i_year_to,
+                      destination_file = temp_file)
+
+          file.copy(temp_file, output_filename)
+        })
+      })
     }
   )
 
@@ -312,29 +349,51 @@ server = function(input, output, session) {
   output$exp_st03 = downloadHandler(
     filename = function() { paste0("ST03-T2CE_", input$reporting_flag, "_", input$year_from, "-", input$year_to, "_", input$ce_data_source, ".xlsx") },
     content = function(output_filename) {
-      temp_file = temp_xlsx()
 
-      ST03.export(EF, CA,
-                  statistical_correspondent = list(name  = input$name,
-                                                   email = input$email,
-                                                   phone = input$phone,
-                                                   institution = input$institution,
-                                                   department  = input$department,
-                                                   address     = input$address,
-                                                   country     = input$country),
+      withProgress(message = "Exporting data to ST03 form. Please wait...", {
+        temp_file = temp_xlsx()
 
-                  version_reported = input$version_reported,
-                  content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
-                  data_coverage    = input$ce_data_coverage,
+        i_statistical_correspondent = list(name  = input$name,
+                                           email = input$email,
+                                           phone = input$phone,
+                                           institution = input$institution,
+                                           department  = input$department,
+                                           address     = input$address,
+                                           country     = input$country)
 
-                  reporting_flag   = input$reporting_flag,
-                  year_from        = input$year_from,
-                  year_to          = input$year_to,
-                  data_source      = input$ce_data_source,
+        i_version_reported = input$version_reported
+        i_content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN
+        i_data_coverage    = input$ce_data_coverage
 
-                  destination_file = temp_file)
+        i_reporting_flag = input$reporting_flag
+        i_year_from      = input$year_from
+        i_year_to        = input$year_to
+        i_data_source    = input$ce_data_source
 
-      file.copy(temp_file, output_filename)
+        ST03_data = ST03.filter_data_CE(EF, CA,
+                                        reporting_flag = input$reporting_flag,
+                                        year_from = input$year_from,
+                                        year_to = input$year_to,
+                                        data_source = input$ce_data_source)
+
+        future_promise({
+          ST03.export(ST03_data,
+                      statistical_correspondent = i_statistical_correspondent,
+
+                      version_reported = i_version_reported,
+                      content_type     = i_content_type,
+                      data_coverage    = i_data_coverage,
+
+                      reporting_flag   = i_reporting_flag,
+                      year_from        = i_year_from,
+                      year_to          = i_year_to,
+                      data_source      = i_data_source,
+
+                      destination_file = temp_file)
+
+          file.copy(temp_file, output_filename)
+        })
+      })
     }
   )
 
@@ -417,39 +476,82 @@ server = function(input, output, session) {
                                    input$sz_frequency_type, "_", input$sz_class_limit, "_",
                                    input$sz_size_interval, ".xlsx") },
     content = function(output_filename) {
-      temp_file = temp_xlsx()
+      withProgress(message = "Exporting data to ST04 form. Please wait...", {
+        temp_file = temp_xlsx()
 
-      ST04.export(SZ,
-                  statistical_correspondent = list(name  = input$name,
-                                                   email = input$email,
-                                                   phone = input$phone,
-                                                   institution = input$institution,
-                                                   department  = input$department,
-                                                   address     = input$address,
-                                                   country     = input$country),
+        i_statistical_correspondent = list(name  = input$name,
+                                           email = input$email,
+                                           phone = input$phone,
+                                           institution = input$institution,
+                                           department  = input$department,
+                                           address     = input$address,
+                                           country     = input$country)
 
-                  version_reported  = input$version_reported,
-                  content_type      = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
+        i_version_reported = input$version_reported
+        i_content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN
 
-                  reporting_flag    = input$reporting_flag,
-                  year_from         = input$year_from,
-                  year_to           = input$year_to,
+        i_reporting_flag = input$reporting_flag
+        i_year_from      = input$year_from
+        i_year_to        = input$year_to
 
-                  species           = input$sz_species,
-                  product_type      = input$sz_product_type,
+        i_species           = input$sz_species
+        i_product_type      = input$sz_product_type
 
-                  sampling_location = input$sz_sampling_location,
-                  sampling_unit     = input$sz_sampling_unit,
-                  raised            = is.na(input$sz_raised) | input$sz_raised == "Yes",
+        i_sampling_location = input$sz_sampling_location
+        i_sampling_unit     = input$sz_sampling_unit
+        i_raised            = is.na(input$sz_raised) | input$sz_raised == "Yes"
 
-                  frequency_type    = input$sz_frequency_type,
-                  size_interval     = input$sz_size_interval,
-                  class_limit       = input$sz_class_limit,
+        i_frequency_type    = input$sz_frequency_type
+        i_size_interval     = input$sz_size_interval
+        i_class_limit       = input$sz_class_limit
 
-                  #template_file    = "./refs/ST04-T2SZ.xlsx",
-                  destination_file = temp_file)
+        ST04_data = ST04.filter_data(SZ,
+                                     reporting_flag    = i_reporting_flag,
+                                     year_from         = i_year_from,
+                                     year_to           = i_year_to,
 
-      file.copy(temp_file, output_filename)
+                                     species           = i_species,
+                                     product_type      = i_product_type,
+
+                                     sampling_location = i_sampling_location,
+                                     sampling_unit     = i_sampling_unit,
+
+                                     raised            = i_raised,
+
+                                     frequency_type    = i_frequency_type,
+
+                                     size_interval     = i_size_interval,
+                                     class_limit       = i_class_limit)
+
+        future_promise({
+          ST04.export(ST04_data,
+                      statistical_correspondent = i_statistical_correspondent,
+
+                      version_reported  = i_version_reported,
+                      content_type      = i_content_type,
+
+                      reporting_flag    = i_reporting_flag,
+                      year_from         = i_year_from,
+                      year_to           = i_year_to,
+
+                      species           = i_species,
+                      product_type      = i_product_type,
+
+                      sampling_location = i_sampling_location,
+                      sampling_unit     = i_sampling_unit,
+
+                      raised            = i_raised,
+
+                      frequency_type    = i_frequency_type,
+
+                      size_interval     = i_size_interval,
+                      class_limit       = i_class_limit,
+
+                      destination_file  = temp_file)
+
+          file.copy(temp_file, output_filename)
+        })
+      })
     }
   )
 
@@ -526,33 +628,68 @@ server = function(input, output, session) {
                                    input$cs_species, "_",  input$cs_frequency_type, "_", input$cs_class_limit, "_",
                                    input$cs_size_interval, ".xlsx") },
     content = function(output_filename) {
-      temp_file = temp_xlsx()
+      i_year_from      = input$year_from
+      i_year_to        = input$year_to
 
-      ST05.export(CS,
-                  statistical_correspondent = list(name  = input$name,
-                                                   email = input$email,
-                                                   phone = input$phone,
-                                                   institution = input$institution,
-                                                   department  = input$department,
-                                                   address     = input$address,
-                                                   country     = input$country),
+      withProgress(message = "Exporting data to ST05 form. Please wait...", {
+        temp_file = temp_xlsx()
 
-                  version_reported  = input$version_reported,
-                  content_type      = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN,
+        i_statistical_correspondent = list(name  = input$name,
+                                           email = input$email,
+                                           phone = input$phone,
+                                           institution = input$institution,
+                                           department  = input$department,
+                                           address     = input$address,
+                                           country     = input$country)
 
-                  reporting_flag    = input$reporting_flag,
-                  year_from         = input$year_from,
-                  year_to           = input$year_to,
+        i_version_reported = input$version_reported
+        i_content_type     = REF_CONTENT_TYPES[CODE == input$content_type]$NAME_EN
 
-                  species           = input$cs_species,
+        i_reporting_flag = input$reporting_flag
+        i_year_from      = input$year_from
+        i_year_to        = input$year_to
 
-                  frequency_type    = input$cs_frequency_type,
-                  size_interval     = input$cs_size_interval,
-                  class_limit       = input$cs_class_limit,
+        i_species           = input$cs_species
 
-                  destination_file = temp_file)
+        i_frequency_type    = input$cs_frequency_type
+        i_size_interval     = input$cs_size_interval
+        i_class_limit       = input$cs_class_limit
 
-      file.copy(temp_file, output_filename)
+        ST05_data = ST05.filter_data(CS,
+                                     reporting_flag    = i_reporting_flag,
+                                     year_from         = i_year_from,
+                                     year_to           = i_year_to,
+
+                                     species           = i_species,
+
+                                     frequency_type    = i_frequency_type,
+
+                                     size_interval     = i_size_interval,
+                                     class_limit       = i_class_limit)
+
+        future_promise({
+          ST05.export(ST05_data,
+                      statistical_correspondent = i_statistical_correspondent,
+
+                      version_reported  = i_version_reported,
+                      content_type      = i_content_type,
+
+                      reporting_flag    = i_reporting_flag,
+                      year_from         = i_year_from,
+                      year_to           = i_year_to,
+
+                      species           = i_species,
+
+                      frequency_type    = i_frequency_type,
+
+                      size_interval     = i_size_interval,
+                      class_limit       = i_class_limit,
+
+                      destination_file  = temp_file)
+
+          file.copy(temp_file, output_filename)
+        })
+      })
     }
   )
 }

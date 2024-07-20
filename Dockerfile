@@ -15,7 +15,9 @@ RUN install2.r --error --skipinstalled \
     shinyWidgets \
     shinycssloaders \
     openxlsx \
-    openxlsx2
+    openxlsx2 \
+    promises \
+    future
 
 # Sets the working directory to the shiny-server root folder
 WORKDIR /srv/shiny-server
