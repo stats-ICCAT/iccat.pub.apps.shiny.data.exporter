@@ -1,5 +1,5 @@
 ui = function() {
-  TITLE = paste0("ICCAT SCRS / Task 1 & 2 data exporter")
+  TITLE = paste0("ICCAT / Task 1 & 2 / data exporter")
   return(
     fluidPage(
       title = TITLE,
