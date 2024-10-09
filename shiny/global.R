@@ -1,3 +1,6 @@
+# To enable shinyapps.io to access external libraries hosted on a private github repo, see also
+# https://support.posit.co/hc/en-us/articles/204536558-Enabling-use-of-private-packages-on-github-com-for-applications-on-shinyapps-io
+
 library(iccat.dev.data) # This library includes the functions to export filtered T1 & T2 data to ST0x forms...
 library(iccat.pub.data)
 

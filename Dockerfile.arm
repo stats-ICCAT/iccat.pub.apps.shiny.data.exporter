@@ -10,36 +10,36 @@ RUN apt-get -y install apt-utils
 
 # Required to build R package dependencies
 
-#RUN apt-get -y install \
-#    libharfbuzz-dev \
-#    libfribidi-dev \
-#    libgit2-dev \
-#    libfreetype6-dev \ 
-#    libpng-dev \ 
-#    libtiff5-dev \
-#    libjpeg-dev \
-#    libudunits2-dev \
-#    libgdal-dev
+RUN apt-get -y install \
+    libharfbuzz-dev \
+    libfribidi-dev \
+    libgit2-dev #\
+    #libfreetype6-dev \ 
+    #libpng-dev \ 
+    #libtiff5-dev \
+    #libjpeg-dev \
+    #libudunits2-dev \
+    #libgdal-dev
 
 WORKDIR /
 
 # Installs all required R packages (and their dependencies) starting from those hat are available on the remote repo
 # and then from the locally available libs (for the time being)
 
-RUN R -e "install.packages('data.table', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('devtools', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('dplyr', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('DT', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('future', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('odbc', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('openxlsx', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('openxlsx2', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('promises', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('shiny', dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('data.table',      dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('devtools',        dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('dplyr',           dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('DT',              dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('future',          dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('odbc',            dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('openxlsx',        dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('openxlsx2',       dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('promises',        dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('shiny',           dependencies = TRUE, repos = 'http://cran.r-project.org')"
 RUN R -e "install.packages('shinycssloaders', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('shinyjs', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('shinyWidgets', dependencies = TRUE, repos = 'http://cran.r-project.org')"
-RUN R -e "install.packages('stringr', dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('shinyjs',         dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('shinyWidgets',    dependencies = TRUE, repos = 'http://cran.r-project.org')"
+RUN R -e "install.packages('stringr',         dependencies = TRUE, repos = 'http://cran.r-project.org')"
 
 # Sets the working directory to the shiny-server root folder
 WORKDIR /srv/shiny-server
