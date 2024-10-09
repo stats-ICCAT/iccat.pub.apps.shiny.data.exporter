@@ -265,7 +265,8 @@ server = function(input, output, session) {
         ST02_data = ST02.filter_data(NC,
                                      i_reporting_flag,
                                      i_year_from, i_year_to)
-        future_promise({
+
+        future_promise(seed = NULL, {
           ST02.export(ST02_data,
                       statistical_correspondent = i_statistical_correspondent,
 
@@ -376,7 +377,7 @@ server = function(input, output, session) {
                                         year_to = input$year_to,
                                         data_source = input$ce_data_source)
 
-        future_promise({
+        future_promise(seed = NULL, {
           ST03.export(ST03_data,
                       statistical_correspondent = i_statistical_correspondent,
 
@@ -523,7 +524,7 @@ server = function(input, output, session) {
                                      size_interval     = i_size_interval,
                                      class_limit       = i_class_limit)
 
-        future_promise({
+        future_promise(seed = NULL, {
           ST04.export(ST04_data,
                       statistical_correspondent = i_statistical_correspondent,
 
@@ -667,7 +668,7 @@ server = function(input, output, session) {
                                      size_interval     = i_size_interval,
                                      class_limit       = i_class_limit)
 
-        future_promise({
+        future_promise(seed = NULL, {
           ST05.export(ST05_data,
                       statistical_correspondent = i_statistical_correspondent,
 
