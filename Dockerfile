@@ -2,22 +2,27 @@ FROM rocker/shiny:latest
 
 WORKDIR /
 
+RUN apt-get update -qq
+RUN apt-get -y -f install \
+    unixodbc-dev
+
 # Installs all required R packages (and their dependencies) starting from those hat are available on the remote repo
 # and then from the locally available libs (for the time being)
 RUN install2.r --error --skipinstalled \
-    devtools \
-    stringr \
-    dplyr \
     data.table \
+    devtools \
+    dplyr \
     DT \
-    shiny \
-    shinyjs \
-    shinyWidgets \
-    shinycssloaders \
+    future \
+    odbc \ 
     openxlsx \
     openxlsx2 \
     promises \
-    future
+    shiny \
+    shinycssloaders \
+    shinyjs \
+    shinyWidgets \
+    stringr
 
 # Sets the working directory to the shiny-server root folder
 WORKDIR /srv/shiny-server
