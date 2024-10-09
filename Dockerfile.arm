@@ -13,13 +13,13 @@ RUN apt-get -y install apt-utils
 RUN apt-get -y install \
     libharfbuzz-dev \
     libfribidi-dev \
-    libgit2-dev #\
-    #libfreetype6-dev \ 
-    #libpng-dev \ 
-    #libtiff5-dev \
-    #libjpeg-dev \
-    #libudunits2-dev \
-    #libgdal-dev
+    libgit2-dev \
+    libfreetype6-dev \ 
+    libpng-dev \ 
+    libtiff5-dev \
+    libjpeg-dev \
+    libudunits2-dev \
+    libgdal-dev
 
 WORKDIR /
 
