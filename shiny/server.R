@@ -158,7 +158,7 @@ server = function(input, output, session) {
                                        i_reporting_flag,
                                        i_year_from, i_year_to)
 
-        future_promise({
+        future_promise(seed = NULL, {
           ST01.export(ST01A_data, ST01B_data,
                       statistical_correspondent = i_statistical_correspondent,
 
