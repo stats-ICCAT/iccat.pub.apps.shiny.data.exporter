@@ -1,4 +1,4 @@
-library(iccat.dev.data)
+library(iccat.dev.data) # This library includes the functions to export filtered T1 & T2 data to ST0x forms...
 library(iccat.pub.data)
 
 library(stringr)
