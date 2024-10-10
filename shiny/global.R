@@ -87,6 +87,8 @@ CAS_FREQUENCY_TYPES    = build_dropdown_data(REF_FREQUENCY_TYPES[CODE %in% c("SF
 ALL_SIZE_INTERVALS = c(1, 2, 5)
 ALL_CLASS_LIMITS   = build_dropdown_data(REF_SIZE_CLASS_LIMITS)
 
+load("./data/META.RData")
+
 load("./data/FC.RData")
 load("./data/FC_f.RData")
 
@@ -101,3 +103,6 @@ load("./data/CA.RData")
 load("./data/SZ.RData")
 
 load("./data/CS.RData")
+
+FIRST_YEAR = max(min(NC$Year), 1950)
+LAST_YEAR  = max(NC$Year)
