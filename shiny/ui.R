@@ -16,8 +16,7 @@ ui = function() {
         ),
         tags$div(
           fluidRow(
-            column(
-              width = 8,
+            column(width = 8,
               h2(
                 style = "margin-top: 5px !important",
                 img(src = "iccat-logo.jpg", height = "48px"),
@@ -26,8 +25,7 @@ ui = function() {
             )
           ),
           fluidRow(
-            column(
-              width = 2,
+            column(width = 2,
               fluidRow(
                 column(width = 12,
                   h3("Statistical correspondent"),
