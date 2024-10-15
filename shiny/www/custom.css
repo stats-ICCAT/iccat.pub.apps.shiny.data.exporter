@@ -14,6 +14,13 @@
 
 /* LAYOUT ETC. */
 
+.shiny-output-error {
+    color: red !important;
+    white-space: nowrap;
+    font-size: large;
+    position: absolute !important;
+}
+
 .nav-tabs li {
     min-width: 128px;
     text-align: center;

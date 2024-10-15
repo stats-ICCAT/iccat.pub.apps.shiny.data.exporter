@@ -5,7 +5,7 @@ server = function(input, output, session) {
                                    year_from = input$year_from,
                                    year_to = input$year_to)
 
-    if(nrow(ST01_table) == 0) stop("No T1FC (ST01A) data identified by current search criteria!")
+    validate(need(expr = nrow(ST01_table) > 0, message = "No T1FC (ST01A) data identified by current search criteria!"))
 
     colnames(ST01_table) =
       c("ICCAT serial number",
@@ -76,7 +76,7 @@ server = function(input, output, session) {
                                    year_from = input$year_from,
                                    year_to = input$year_to)
 
-    if(nrow(ST01_table) == 0) stop("No T1FC (ST01B) data identified by current search criteria!")
+    validate(need(expr = nrow(ST01_table) > 0, message = "No T1FC (ST01B) data identified by current search criteria!"))
 
     colnames(ST01_table) =
       c("Flag of vessel",
@@ -182,7 +182,7 @@ server = function(input, output, session) {
                                   year_from = input$year_from,
                                   year_to = input$year_to)
 
-    if(nrow(ST02_table) == 0) stop("No T1NC data identified by current search criteria!")
+    validate(need(expr = nrow(ST02_table) > 0, message = "No T1NC data identified by current search criteria!"))
 
     colnames(ST02_table) =
       c("Flag of vessel",
@@ -291,7 +291,7 @@ server = function(input, output, session) {
                                      year_to = input$year_to,
                                      data_source = input$ce_data_source)
 
-    if(nrow(ST03_table) == 0) stop("No T2CE data identified by current search criteria!")
+    validate(need(expr = nrow(ST03_table) > 0, message = "No T2CE data identified by current search criteria!"))
 
     colnames(ST03_table) =
       c("Flag of vessel",
@@ -405,7 +405,7 @@ server = function(input, output, session) {
                                   sampling_location = input$sz_sampling_location, sampling_unit = input$sz_sampling_unit, raised = is.na(input$sz_raised) | input$sz_raised == "Yes",
                                   frequency_type = input$sz_frequency_type, size_interval = input$sz_size_interval, class_limit = input$sz_class_limit)
 
-    if(nrow(ST04_table) == 0) stop("No T2SZ data identified by current search criteria!")
+    validate(need(expr = nrow(ST04_table) > 0, message = "No T2SZ data identified by current search criteria!"))
 
     colnames(ST04_table) =
       c("Flag of vessel",
@@ -562,7 +562,7 @@ server = function(input, output, session) {
                                   species = input$cs_species,
                                   frequency_type = input$cs_frequency_type, size_interval = input$cs_size_interval, class_limit = input$cs_class_limit)
 
-    if(nrow(ST05_table) == 0) stop("No T2CS data identified by current search criteria!")
+    validate(need(expr = nrow(ST05_table) > 0, message = "No T2CS data identified by current search criteria!"))
 
     colnames(ST05_table) =
       c("Flag of vessel",
